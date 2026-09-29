@@ -102,6 +102,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnAddServer.setOnClickListener { openServerEdit(null) }
         binding.btnSettings.setOnClickListener { openSettings() }
 
+        binding.btnImport.setOnClickListener { openSubscriptionImport() }
+
         binding.coreSelector.setOnCheckedChangeListener { _, checkedId ->
             val coreType = when (checkedId) {
                 R.id.rbXray -> VpnService.CORE_XRAY
@@ -150,6 +152,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun openSettings() {
         val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openSubscriptionImport() {
+        val intent = Intent(this, SubscriptionActivity::class.java)
         startActivity(intent)
     }
 

@@ -31,6 +31,14 @@
     <string name="settings_singbox">Sing-box</string>
     <string name="settings_auto_connect">Auto connect on boot</string>
 
+    <string name="btn_import">Import</string>
+    <string name="subscription_title">Import Subscription</string>
+    <string name="subscription_url_hint">Subscription URL</string>
+    <string name="btn_paste">Paste</string>
+    <string name="toast_import_success">Imported %d servers</string>
+    <string name="toast_import_failed">Failed to parse subscription</string>
+    <string name="toast_enter_url">Please enter subscription URL</string>
+
     <string name="error_vpn_permission">VPN permission required</string>
     <string name="error_connection_failed">Connection failed</string>
     <string name="error_invalid_config">Invalid configuration</string>

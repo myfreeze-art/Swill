@@ -114,6 +114,17 @@
             android:layout_marginRight="@dimen/small_margin" />
 
         <Button
+            android:id="@+id/btnImport"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:text="Import"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/colorSurface"
+            android:layout_marginRight="@dimen/small_margin" />
+
+        <Button
             android:id="@+id/btnSettings"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height"
