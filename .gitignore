@@ -1,0 +1,42 @@
+# Android
+*.iml
+.idea/
+gradle/
+local.properties
+*.local
+
+# Build outputs
+build/
+dist/
+*.apk
+*.aar
+*.so
+
+# Android Studio
+.idea/
+*.swp
+*.swo
+
+# Native build
+app/cmake/build
+app/src/main/jni/build
+*.o
+*.a
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Keystores
+*.jks
+*.keystore
+
+# Testing
+.coverage
+
+# OS
+.DS_Store
+Thumbs.db
