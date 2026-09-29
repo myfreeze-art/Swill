@@ -17,12 +17,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // NDK configuration
         ndk {
             abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a", "x86_64"))
         }
 
-        // External native build
         externalNativeBuild {
             cmake {
                 arguments.add("-DANDROID_STL=c++_shared")
@@ -43,16 +41,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            
-            // Enable native debugging in release
+
             ndk {
                 debugSymbolLevel = "SYMBOL_TABLE"
             }
         }
+
         debug {
             isDebuggable = true
-            
-            // Enable native debugging
+
             ndk {
                 debugSymbolLevel = "FULL"
             }
@@ -86,34 +83,26 @@ android {
         }
     }
 
-    // Enable parcelize
     parcelize {
         createBackupProperty = true
     }
 }
 
 dependencies {
-    // Core
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    
-    // Kotlin
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    
-    // Lifecycle
+
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    
-    // Preferences
+
     implementation("androidx.preference:preference-ktx:1.2.1")
-    
-    // CardView
     implementation("androidx.cardview:cardview:1.0.0")
-    
-    // Testing
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

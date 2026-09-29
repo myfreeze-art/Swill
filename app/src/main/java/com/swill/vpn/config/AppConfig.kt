@@ -6,7 +6,7 @@ import com.swill.vpn.model.VpnConfig
 import com.swill.vpn.vpn.VpnService
 
 class AppConfig(private val context: Context) {
-    
+
     companion object {
         private const val PREFS_NAME = "SwillPrefs"
         private const val KEY_LAST_CONFIG = "last_config"
@@ -15,12 +15,11 @@ class AppConfig(private val context: Context) {
         private const val KEY_DEFAULT_CORE = "default_core"
         private const val KEY_CONFIGS_LIST = "configs_list"
     }
-    
+
     private val prefs: SharedPreferences by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
-    
-    // Save last used configuration
+
     fun saveLastConfig(config: VpnConfig, coreType: String) {
         prefs.edit().apply {
             putString(KEY_LAST_CONFIG, config.id)
@@ -28,89 +27,71 @@ class AppConfig(private val context: Context) {
             apply()
         }
     }
-    
-    // Get last used configuration
+
     fun getLastConfig(): Pair<VpnConfig?, String> {
         val configId = prefs.getString(KEY_LAST_CONFIG, null)
         val coreType = prefs.getString(KEY_LAST_CORE, VpnService.CORE_XRAY)
-        
+
         configId?.let {
             val config = getConfigById(it)
             return Pair(config, coreType ?: VpnService.CORE_XRAY)
         }
-        
+
         return Pair(null, coreType ?: VpnService.CORE_XRAY)
     }
-    
-    // Save a configuration
+
     fun saveConfig(config: VpnConfig): Boolean {
         val configs = getAllConfigs().toMutableList()
-        
-        // Check if config with same ID exists
+
         val existingIndex = configs.indexOfFirst { it.id == config.id }
-        
+
         if (existingIndex >= 0) {
             configs[existingIndex] = config
         } else {
             configs.add(config)
         }
-        
-        // Save to preferences (simple approach, for many configs use Room database)
+
         val configsJson = configs.joinToString(",") { it.id }
         prefs.edit().putString(KEY_CONFIGS_LIST, configsJson).apply()
-        
-        // Save individual config (in production, use proper serialization)
+
         saveConfigToStorage(config)
-        
+
         return true
     }
-    
-    // Get configuration by ID
-    fun getConfigById(id: String): VpnConfig? {
-        return loadConfigFromStorage(id)
-    }
-    
-    // Get all configurations
+
+    fun getConfigById(id: String): VpnConfig? = loadConfigFromStorage(id)
+
     fun getAllConfigs(): List<VpnConfig> {
         val configsJson = prefs.getString(KEY_CONFIGS_LIST, "")
         val configIds = configsJson?.split(",") ?: emptyList()
-        
+
         return configIds.mapNotNull { loadConfigFromStorage(it) }
     }
-    
-    // Delete configuration
+
     fun deleteConfig(id: String): Boolean {
         val configs = getAllConfigs().toMutableList()
         configs.removeAll { it.id == id }
-        
+
         val configsJson = configs.joinToString(",") { it.id }
         prefs.edit().putString(KEY_CONFIGS_LIST, configsJson).apply()
-        
-        // Delete from storage
+
         deleteConfigFromStorage(id)
-        
+
         return true
     }
-    
-    // Auto-connect settings
+
     fun setAutoConnectOnBoot(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_AUTO_CONNECT, enabled).apply()
     }
-    
-    fun isAutoConnectOnBoot(): Boolean {
-        return prefs.getBoolean(KEY_AUTO_CONNECT, false)
-    }
-    
-    // Default core settings
+
+    fun isAutoConnectOnBoot(): Boolean = prefs.getBoolean(KEY_AUTO_CONNECT, false)
+
     fun setDefaultCore(coreType: String) {
         prefs.edit().putString(KEY_DEFAULT_CORE, coreType).apply()
     }
-    
-    fun getDefaultCore(): String {
-        return prefs.getString(KEY_DEFAULT_CORE, VpnService.CORE_XRAY) ?: VpnService.CORE_XRAY
-    }
-    
-    // Private methods for storage
+
+    fun getDefaultCore(): String = prefs.getString(KEY_DEFAULT_CORE, VpnService.CORE_XRAY) ?: VpnService.CORE_XRAY
+
     private fun saveConfigToStorage(config: VpnConfig) {
         val prefs = context.getSharedPreferences("config_${config.id}", Context.MODE_PRIVATE)
         with(prefs.edit()) {
@@ -131,10 +112,10 @@ class AppConfig(private val context: Context) {
             apply()
         }
     }
-    
+
     private fun loadConfigFromStorage(id: String): VpnConfig? {
         val prefs = context.getSharedPreferences("config_$id", Context.MODE_PRIVATE)
-        
+
         return try {
             VpnConfig(
                 id = id,
@@ -153,11 +134,11 @@ class AppConfig(private val context: Context) {
                 allowInsecure = prefs.getBoolean("allowInsecure", false),
                 coreType = prefs.getString("coreType", VpnService.CORE_XRAY) ?: VpnService.CORE_XRAY
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
-    
+
     private fun deleteConfigFromStorage(id: String) {
         val prefs = context.getSharedPreferences("config_$id", Context.MODE_PRIVATE)
         prefs.edit().clear().apply()

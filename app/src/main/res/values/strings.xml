@@ -2,41 +2,35 @@
 <resources>
     <string name="app_name">Swill</string>
     <string name="app_description">Modern VPN Client with X-ray & Sing-box support</string>
-    
-    <!-- Main Activity -->
+
     <string name="title_activity_main">Swill VPN</string>
     <string name="btn_connect">Connect</string>
     <string name="btn_disconnect">Disconnect</string>
     <string name="btn_settings">Settings</string>
-    
-    <!-- Connection Status -->
+
     <string name="status_disconnected">Disconnected</string>
     <string name="status_connecting">Connecting...</string>
     <string name="status_connected">Connected</string>
     <string name="status_error">Error</string>
-    
-    <!-- Protocols -->
+
     <string name="protocol_vless">VLESS</string>
     <string name="protocol_vmess">VMESS</string>
     <string name="protocol_trojan">Trojan</string>
     <string name="protocol_shadowsocks">Shadowsocks</string>
     <string name="protocol_wireguard">WireGuard</string>
-    
-    <!-- Servers -->
+
     <string name="server_address_hint">Server Address</string>
     <string name="server_port_hint">Port</string>
     <string name="server_username_hint">Username</string>
     <string name="server_password_hint">Password</string>
     <string name="server_uuid_hint">UUID</string>
-    
-    <!-- Settings -->
+
     <string name="settings_title">Settings</string>
     <string name="settings_core">VPN Core</string>
     <string name="settings_xray">X-ray</string>
     <string name="settings_singbox">Sing-box</string>
     <string name="settings_auto_connect">Auto connect on boot</string>
-    
-    <!-- Errors -->
+
     <string name="error_vpn_permission">VPN permission required</string>
     <string name="error_connection_failed">Connection failed</string>
     <string name="error_invalid_config">Invalid configuration</string>

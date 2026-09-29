@@ -22,29 +22,28 @@ data class VpnConfig(
     val allowInsecure: Boolean = false,
     val coreType: String = "xray"
 ) : Parcelable {
-    
-    // Protocol constants
+
     companion object {
         const val PROTOCOL_VLESS = "vless"
         const val PROTOCOL_VMESS = "vmess"
         const val PROTOCOL_TROJAN = "trojan"
         const val PROTOCOL_SHADOWSOCKS = "shadowsocks"
         const val PROTOCOL_WIREGUARD = "wireguard"
-        
+
         const val NETWORK_TCP = "tcp"
         const val NETWORK_WS = "ws"
         const val NETWORK_GRPC = "grpc"
         const val NETWORK_KCP = "kcp"
         const val NETWORK_QUIC = "quic"
-        
+
         const val SECURITY_NONE = "none"
         const val SECURITY_TLS = "tls"
         const val SECURITY_REALITY = "reality"
     }
-    
+
     fun toJson(): String {
         val json = JSONObject()
-        
+
         when (protocol) {
             PROTOCOL_VLESS -> {
                 json.put("inbounds", JSONObject().apply {
@@ -59,7 +58,7 @@ data class VpnConfig(
                         put("destOverride", listOf("http", "tls"))
                     })
                 })
-                
+
                 json.put("outbounds", listOf(JSONObject().apply {
                     put("protocol", "vless")
                     put("settings", JSONObject().apply {
@@ -73,58 +72,48 @@ data class VpnConfig(
                             }))
                         }))
                     })
-                    
-                    // Add stream settings based on network
+
                     if (network != null) {
                         put("streamSettings", JSONObject().apply {
                             put("network", network)
-                            
+
                             when (network) {
-                                NETWORK_WS -> {
-                                    put("wsSettings", JSONObject().apply {
-                                        headerType?.let { put("headers", JSONObject().apply {
+                                NETWORK_WS -> put("wsSettings", JSONObject().apply {
+                                    headerType?.let { 
+                                        put("headers", JSONObject().apply {
                                             put("Host", requestHost ?: "")
-                                        }) }
-                                        path?.let { put("path", it) }
-                                    })
-                                }
-                                NETWORK_GRPC -> {
-                                    put("grpcSettings", JSONObject().apply {
-                                        put("serviceName", path ?: "")
-                                    })
-                                }
-                                NETWORK_TCP -> {
-                                    requestHost?.let { 
-                                        put("tcpSettings", JSONObject().apply {
-                                            put("header", JSONObject().apply {
-                                                put("type", headerType ?: "none")
-                                                put("request", JSONObject().apply {
-                                                    put("host", listOf(it))
-                                                })
-                                            })
                                         })
                                     }
-                                }
-                                NETWORK_KCP -> {
-                                    put("kcpSettings", JSONObject().apply {
-                                        put("mtu", 1350)
-                                        put("tti", 50)
-                                        put("uplinkCapacity", 5)
-                                        put("downlinkCapacity", 20)
-                                        put("congestion", false)
-                                        put("readBufferSize", 2)
-                                        put("writeBufferSize", 2)
+                                    path?.let { put("path", it) }
+                                })
+                                NETWORK_GRPC -> put("grpcSettings", JSONObject().apply {
+                                    put("serviceName", path ?: "")
+                                })
+                                NETWORK_TCP -> requestHost?.let { 
+                                    put("tcpSettings", JSONObject().apply {
+                                        put("header", JSONObject().apply {
+                                            put("type", headerType ?: "none")
+                                            put("request", JSONObject().apply {
+                                                put("host", listOf(it))
+                                            })
+                                        })
                                     })
                                 }
-                                NETWORK_QUIC -> {
-                                    put("quicSettings", JSONObject().apply {
-                                        put("security", security ?: SECURITY_TLS)
-                                        requestHost?.let { put("key", it) }
-                                    })
-                                }
+                                NETWORK_KCP -> put("kcpSettings", JSONObject().apply {
+                                    put("mtu", 1350)
+                                    put("tti", 50)
+                                    put("uplinkCapacity", 5)
+                                    put("downlinkCapacity", 20)
+                                    put("congestion", false)
+                                    put("readBufferSize", 2)
+                                    put("writeBufferSize", 2)
+                                })
+                                NETWORK_QUIC -> put("quicSettings", JSONObject().apply {
+                                    put("security", security ?: SECURITY_TLS)
+                                    requestHost?.let { put("key", it) }
+                                })
                             }
-                            
-                            // Add TLS/SNI settings
+
                             if (security == SECURITY_TLS || security == SECURITY_REALITY) {
                                 put("security", security)
                                 put("tlsSettings", JSONObject().apply {
@@ -136,7 +125,7 @@ data class VpnConfig(
                     }
                 }))
             }
-            
+
             PROTOCOL_VMESS -> {
                 json.put("inbounds", JSONObject().apply {
                     put("port", 1080)
@@ -146,7 +135,7 @@ data class VpnConfig(
                         put("udp", true)
                     })
                 })
-                
+
                 json.put("outbounds", listOf(JSONObject().apply {
                     put("protocol", "vmess")
                     put("settings", JSONObject().apply {
@@ -160,16 +149,15 @@ data class VpnConfig(
                             }))
                         }))
                     })
-                    
+
                     if (network != null) {
                         put("streamSettings", JSONObject().apply {
                             put("network", network)
-                            // Similar stream settings as VLESS
                         })
                     }
                 }))
             }
-            
+
             PROTOCOL_TROJAN -> {
                 json.put("inbounds", JSONObject().apply {
                     put("port", 1080)
@@ -179,7 +167,7 @@ data class VpnConfig(
                         put("udp", true)
                     })
                 })
-                
+
                 json.put("outbounds", listOf(JSONObject().apply {
                     put("protocol", "trojan")
                     put("settings", JSONObject().apply {
@@ -189,7 +177,7 @@ data class VpnConfig(
                             put("password", uuid)
                         }))
                     })
-                    
+
                     if (network != null) {
                         put("streamSettings", JSONObject().apply {
                             put("network", network)
@@ -203,7 +191,7 @@ data class VpnConfig(
                     }
                 }))
             }
-            
+
             PROTOCOL_SHADOWSOCKS -> {
                 json.put("inbounds", JSONObject().apply {
                     put("port", 1080)
@@ -213,7 +201,7 @@ data class VpnConfig(
                         put("udp", true)
                     })
                 })
-                
+
                 json.put("outbounds", listOf(JSONObject().apply {
                     put("protocol", "shadowsocks")
                     put("settings", JSONObject().apply {
@@ -226,9 +214,8 @@ data class VpnConfig(
                     })
                 }))
             }
-            
+
             else -> {
-                // Default configuration
                 json.put("inbounds", JSONObject().apply {
                     put("port", 1080)
                     put("protocol", "socks")
@@ -237,14 +224,13 @@ data class VpnConfig(
                         put("udp", true)
                     })
                 })
-                
+
                 json.put("outbounds", listOf(JSONObject().apply {
                     put("protocol", "freedom")
                 }))
             }
         }
-        
-        // Add routing for Sing-box compatibility
+
         if (coreType == "singbox") {
             json.put("route", JSONObject().apply {
                 put("rules", listOf(
@@ -263,7 +249,7 @@ data class VpnConfig(
                 ))
                 put("auto_detect_interface", true)
             })
-            
+
             json.put("dns", JSONObject().apply {
                 put("servers", listOf(
                     JSONObject().apply {
@@ -277,19 +263,18 @@ data class VpnConfig(
                 ))
             })
         }
-        
+
         return json.toString()
     }
-    
+
     fun toSingBoxJson(): String {
-        // Sing-box specific configuration
         val json = JSONObject()
-        
+
         json.put("log", JSONObject().apply {
             put("level", "info")
             put("output", "/dev/null")
         })
-        
+
         json.put("dns", JSONObject().apply {
             put("servers", listOf(
                 JSONObject().apply {
@@ -298,7 +283,7 @@ data class VpnConfig(
                 }
             ))
         })
-        
+
         json.put("inbounds", listOf(JSONObject().apply {
             put("type", "tun")
             put("tag", "tun-in")
@@ -307,12 +292,12 @@ data class VpnConfig(
             put("stack", "system")
             put("endpoint_independent_nat", true)
         }))
-        
+
         json.put("outbounds", listOf(
             JSONObject().apply {
                 put("type", protocol)
                 put("tag", "proxy")
-                
+
                 when (protocol) {
                     PROTOCOL_VLESS -> {
                         put("server", serverAddress)
@@ -338,8 +323,7 @@ data class VpnConfig(
                         put("method", security ?: "aes-256-gcm")
                     }
                 }
-                
-                // Add transport layer settings
+
                 if (network != null) {
                     put("transport", JSONObject().apply {
                         put("type", network)
@@ -350,14 +334,11 @@ data class VpnConfig(
                                     put("Host", it)
                                 }) }
                             }
-                            NETWORK_GRPC -> {
-                                put("service_name", path ?: "")
-                            }
+                            NETWORK_GRPC -> put("service_name", path ?: "")
                         }
                     })
                 }
-                
-                // Add TLS settings
+
                 if (security == SECURITY_TLS || security == SECURITY_REALITY) {
                     put("tls", JSONObject().apply {
                         put("enabled", true)
@@ -379,7 +360,7 @@ data class VpnConfig(
                 put("tag", "dns-out")
             }
         ))
-        
+
         json.put("route", JSONObject().apply {
             put("rules", listOf(
                 JSONObject().apply {
@@ -393,7 +374,7 @@ data class VpnConfig(
             ))
             put("auto_detect_interface", true)
         })
-        
+
         return json.toString()
     }
 }

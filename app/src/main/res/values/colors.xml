@@ -8,8 +8,7 @@
     <color name="colorError">#B00020</color>
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSurface">#000000</color>
-    
-    <!-- Status colors -->
+
     <color name="colorConnected">#4CAF50</color>
     <color name="colorConnecting">#FFC107</color>
     <color name="colorDisconnected">#F44336</color>
