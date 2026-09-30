@@ -1,6 +1,7 @@
 package com.swill.vpn.model
 
 import android.os.Parcelable
+import com.swill.vpn.core.ServerPinger
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 
@@ -27,7 +28,8 @@ data class VpnConfig(
     val bypassEnabled: Boolean = false,
     val bypassDomains: String? = null,
     val bypassIps: String? = null,
-    val bypassGeoip: String? = null
+    val bypassGeoip: String? = null,
+    val pingResult: ServerPinger.PingResult? = null
 ) : Parcelable {
 
     companion object {

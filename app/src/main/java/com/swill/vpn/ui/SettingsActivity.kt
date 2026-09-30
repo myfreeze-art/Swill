@@ -1,5 +1,6 @@
 package com.swill.vpn.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +51,11 @@ class SettingsActivity : AppCompatActivity() {
             }
             appConfig.setDefaultCore(coreType)
             Toast.makeText(this, "Default core set to $coreType", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnSplitTunnel.setOnClickListener {
+            val intent = Intent(this, SplitTunnelActivity::class.java)
+            startActivity(intent)
         }
     }
 }

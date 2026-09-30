@@ -6,13 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.swill.vpn.R
+import com.swill.vpn.core.ServerPinger
 import com.swill.vpn.model.VpnConfig
 
 class ServerAdapter(
     private var servers: List<VpnConfig> = emptyList(),
     private val onServerSelected: (VpnConfig) -> Unit,
     private val onServerEdit: (VpnConfig) -> Unit,
-    private val onServerDelete: (VpnConfig) -> Unit
+    private val onServerDelete: (VpnConfig) -> Unit,
+    private val onServerPing: (VpnConfig) -> Unit
 ) : RecyclerView.Adapter<ServerAdapter.ServerViewHolder>() {
 
     private var selectedServer: VpnConfig? = null
@@ -50,6 +52,13 @@ class ServerAdapter(
                     onServerDelete(servers[position])
                 }
             }
+
+            itemView.findViewById<View>(R.id.btnPing).setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onServerPing(servers[position])
+                }
+            }
         }
     }
 
@@ -66,6 +75,9 @@ class ServerAdapter(
         holder.tvAddress.text = "${server.serverAddress}:${server.serverPort}"
         holder.tvProtocol.text = server.protocol.uppercase()
         holder.tvCore.text = server.coreType.uppercase()
+
+        val tvPing = holder.itemView.findViewById<TextView>(R.id.tvPing)
+        tvPing?.text = server.pingResult?.let { "${it.latency}ms" } ?: "?"
 
         val isSelected = position == selectedPosition
         holder.viewSelected.visibility = if (isSelected) View.VISIBLE else View.GONE
@@ -91,4 +103,16 @@ class ServerAdapter(
     }
 
     fun getSelectedServer(): VpnConfig? = selectedServer
+
+    fun updatePingResult(serverId: String, result: ServerPinger.PingResult) {
+        val updatedServers = servers.map { server ->
+            if (server.id == serverId) {
+                server.copy(pingResult = result)
+            } else {
+                server
+            }
+        }
+        servers = updatedServers
+        notifyDataSetChanged()
+    }
 }

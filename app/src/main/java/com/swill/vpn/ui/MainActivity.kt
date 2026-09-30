@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.VpnService
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
@@ -12,11 +13,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.swill.vpn.R
 import com.swill.vpn.config.AppConfig
+import com.swill.vpn.core.ServerPinger
 import com.swill.vpn.databinding.ActivityMainBinding
 import com.swill.vpn.jni.NativeUtils
 import com.swill.vpn.model.VpnConfig
 import com.swill.vpn.vpn.VpnService
 import com.swill.vpn.vpn.VpnService.VpnBinder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var isBound = false
     private lateinit var appConfig: AppConfig
     private var serverAdapter: ServerAdapter? = null
+    private val serverPinger = lazy { ServerPinger(this) }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -78,7 +85,8 @@ class MainActivity : AppCompatActivity() {
             servers = appConfig.getAllConfigs(),
             onServerSelected = { server -> onServerSelected(server) },
             onServerEdit = { server -> openServerEdit(server) },
-            onServerDelete = { server -> deleteServer(server) }
+            onServerDelete = { server -> deleteServer(server) },
+            onServerPing = { server -> pingServer(server) }
         )
 
         binding.rvServers.apply {
@@ -229,6 +237,37 @@ class MainActivity : AppCompatActivity() {
             binding.btnConnect.setBackgroundColor(getColor(R.color.colorPrimary))
             binding.statusText.text = getString(R.string.status_disconnected)
             binding.statusText.setTextColor(getColor(R.color.colorDisconnected))
+        }
+    }
+
+    private fun pingServer(server: VpnConfig) {
+        Toast.makeText(this, "Pinging ${server.name}...", Toast.LENGTH_SHORT).show()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val results = withContext(Dispatchers.IO) {
+                serverPinger.value.pingServer(
+                    server.serverAddress,
+                    server.serverPort,
+                    listOf(ServerPinger.METHOD_HTTP, ServerPinger.METHOD_TCP)
+                )
+            }
+
+            val bestResult = results.find { it is ServerPinger.PingResult.Success } as? ServerPinger.PingResult.Success
+            serverAdapter?.updatePingResult(
+                server.id,
+                bestResult ?: ServerPinger.PingResult.Failure("All methods failed", "")
+            )
+
+            if (bestResult != null) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Ping: ${bestResult.latency}ms (${bestResult.method})",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val error = (results.firstOrNull() as? ServerPinger.PingResult.Failure)?.error ?: "Unknown error"
+                Toast.makeText(this@MainActivity, "Ping failed: $error", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

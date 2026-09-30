@@ -71,6 +71,17 @@
                         android:background="@drawable/bg_core_xray"
                         android:paddingHorizontal="@dimen/small_margin"
                         android:paddingVertical="2dp" />
+
+                    <TextView
+                        android:id="@+id/tvPing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="?"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="@dimen/small_margin"
+                        android:background="@color/colorSurface"
+                        android:paddingHorizontal="@dimen/small_margin"
+                        android:paddingVertical="2dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -90,6 +101,20 @@
                     android:textAllCaps="false"
                     android:backgroundTint="@color/colorPrimary"
                     android:textColor="@android:color/white"
+                    android:minWidth="0"
+                    android:minHeight="0"
+                    android:padding="@dimen/small_margin" />
+
+                <Button
+                    android:id="@+id/btnPing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ping"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="@dimen/small_margin"
                     android:minWidth="0"
                     android:minHeight="0"
                     android:padding="@dimen/small_margin" />

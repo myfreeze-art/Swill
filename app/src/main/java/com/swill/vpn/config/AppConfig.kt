@@ -2,6 +2,9 @@ package com.swill.vpn.config
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.swill.vpn.core.SplitTunnelManager
+import com.swill.vpn.model.SplitTunnelApp
+import com.swill.vpn.model.Subscription
 import com.swill.vpn.model.VpnConfig
 import com.swill.vpn.vpn.VpnService
 
@@ -14,6 +17,9 @@ class AppConfig(private val context: Context) {
         private const val KEY_AUTO_CONNECT = "auto_connect_on_boot"
         private const val KEY_DEFAULT_CORE = "default_core"
         private const val KEY_CONFIGS_LIST = "configs_list"
+        private const val KEY_SUBSCRIPTIONS_LIST = "subscriptions_list"
+        private const val KEY_SPLIT_TUNNEL_MODE = "split_tunnel_mode"
+        private const val KEY_SPLIT_TUNNEL_APPS = "split_tunnel_apps"
     }
 
     private val prefs: SharedPreferences by lazy {
@@ -156,5 +162,107 @@ class AppConfig(private val context: Context) {
     private fun deleteConfigFromStorage(id: String) {
         val prefs = context.getSharedPreferences("config_$id", Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
+    }
+
+    fun saveSubscription(subscription: Subscription): Boolean {
+        val subscriptions = getAllSubscriptions().toMutableList()
+
+        val existingIndex = subscriptions.indexOfFirst { it.id == subscription.id }
+
+        if (existingIndex >= 0) {
+            subscriptions[existingIndex] = subscription
+        } else {
+            subscriptions.add(subscription)
+        }
+
+        val subscriptionsJson = subscriptions.joinToString(",") { it.id }
+        prefs.edit().putString(KEY_SUBSCRIPTIONS_LIST, subscriptionsJson).apply()
+
+        saveSubscriptionToStorage(subscription)
+
+        return true
+    }
+
+    fun getAllSubscriptions(): List<Subscription> {
+        val subscriptionsJson = prefs.getString(KEY_SUBSCRIPTIONS_LIST, "")
+        val subscriptionIds = subscriptionsJson?.split(",") ?: emptyList()
+
+        return subscriptionIds.mapNotNull { loadSubscriptionFromStorage(it) }
+    }
+
+    fun deleteSubscription(id: String): Boolean {
+        val subscriptions = getAllSubscriptions().toMutableList()
+        subscriptions.removeAll { it.id == id }
+
+        val subscriptionsJson = subscriptions.joinToString(",") { it.id }
+        prefs.edit().putString(KEY_SUBSCRIPTIONS_LIST, subscriptionsJson).apply()
+
+        deleteSubscriptionFromStorage(id)
+
+        return true
+    }
+
+    private fun saveSubscriptionToStorage(subscription: Subscription) {
+        val prefs = context.getSharedPreferences("subscription_${subscription.id}", Context.MODE_PRIVATE)
+        with(prefs.edit()) {
+            putString("name", subscription.name)
+            putString("url", subscription.url)
+            putLong("lastUpdated", subscription.lastUpdated)
+            putBoolean("autoUpdate", subscription.autoUpdate)
+            putLong("updateInterval", subscription.updateInterval)
+            apply()
+        }
+    }
+
+    private fun loadSubscriptionFromStorage(id: String): Subscription? {
+        val prefs = context.getSharedPreferences("subscription_$id", Context.MODE_PRIVATE)
+
+        return try {
+            Subscription(
+                id = id,
+                name = prefs.getString("name", "Untitled") ?: "Untitled",
+                url = prefs.getString("url", "") ?: "",
+                lastUpdated = prefs.getLong("lastUpdated", 0),
+                autoUpdate = prefs.getBoolean("autoUpdate", false),
+                updateInterval = prefs.getLong("updateInterval", 24 * 60 * 60 * 1000)
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun deleteSubscriptionFromStorage(id: String) {
+        val prefs = context.getSharedPreferences("subscription_$id", Context.MODE_PRIVATE)
+        prefs.edit().clear().apply()
+    }
+
+    fun setSplitTunnelMode(mode: String) {
+        prefs.edit().putString(KEY_SPLIT_TUNNEL_MODE, mode).apply()
+    }
+
+    fun getSplitTunnelMode(): String = prefs.getString(KEY_SPLIT_TUNNEL_MODE, SplitTunnelManager.SplitTunnelMode.ALL_THROUGH_VPN.name) ?: SplitTunnelManager.SplitTunnelMode.ALL_THROUGH_VPN.name
+
+    fun saveSplitTunnelApps(apps: List<SplitTunnelApp>) {
+        val appsJson = apps.joinToString(";") { "${it.packageName},${it.appName},${it.enabled},${it.routeThroughVpn}" }
+        prefs.edit().putString(KEY_SPLIT_TUNNEL_APPS, appsJson).apply()
+    }
+
+    fun getSplitTunnelApps(): List<SplitTunnelApp> {
+        val appsJson = prefs.getString(KEY_SPLIT_TUNNEL_APPS, "")
+        if (appsJson.isNullOrEmpty()) return emptyList()
+
+        return appsJson.split(";").mapNotNull { part ->
+            val parts = part.split(",")
+            if (parts.size >= 4) {
+                SplitTunnelApp(
+                    packageName = parts[0],
+                    appName = parts[1],
+                    enabled = parts[2].toBoolean(),
+                    routeThroughVpn = parts[3].toBoolean()
+                )
+            } else {
+                null
+            }
+        }
     }
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/small_margin"
+    app:cardCornerRadius="@dimen/stroke_width"
+    app:cardElevation="@dimen/card_elevation"
+    app:cardBackgroundColor="@color/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/default_margin">
+
+        <TextView
+            android:id="@+id/tvSubscriptionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subscription Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/tvSubscriptionUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="https://example.com/subscription"
+            android:textSize="12sp"
+            android:textColor="@color/colorOnSurface"
+            android:layout_marginTop="@dimen/small_margin" />
+
+        <TextView
+            android:id="@+id/tvSubscriptionLastUpdated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Updated: Never"
+            android:textSize="12sp"
+            android:textColor="@color/colorOnSurface"
+            android:layout_marginTop="@dimen/small_margin" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_gravity="end">
+
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:minWidth="0"
+                android:minHeight="0"
+                android:padding="@dimen/small_margin" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/colorError"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:minWidth="0"
+                android:minHeight="0"
+                android:padding="@dimen/small_margin" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
