@@ -74,7 +74,6 @@ class ServerEditActivity : AppCompatActivity() {
         coreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCore.adapter = coreAdapter
 
-        // Hysteria2 Obfs spinner
         val hysteria2ObfsOptions = listOf(
             VpnConfig.ObfsNone,
             VpnConfig.ObfsSalamander,
@@ -95,10 +94,8 @@ class ServerEditActivity : AppCompatActivity() {
         binding.spinnerProtocol.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
                 updateHysteria2FieldsVisibility()
-                // Hysteria2 only works with Sing-box core
                 val selectedProtocol = parent?.getItemAtPosition(position).toString()
                 if (selectedProtocol == VpnConfig.PROTOCOL_HYSTERIA2) {
-                    // Auto-select Sing-box for Hysteria2
                     binding.spinnerCore.setSelection(
                         (binding.spinnerCore.adapter as ArrayAdapter<String>).getPosition(VpnService.CORE_SINGBOX)
                     )
@@ -149,7 +146,6 @@ class ServerEditActivity : AppCompatActivity() {
             (binding.spinnerCore.adapter as ArrayAdapter<String>).getPosition(config.coreType)
         )
 
-        // Hysteria2 specific fields
         binding.etHysteria2AuthPassword.setText(config.hysteria2AuthPassword ?: "")
         binding.etHysteria2ObfsPassword.setText(config.hysteria2ObfsPassword ?: "")
         config.hysteria2Obfs?.let {
@@ -158,7 +154,6 @@ class ServerEditActivity : AppCompatActivity() {
             )
         }
 
-        // Bypass fields
         binding.cbBypassEnabled.isChecked = config.bypassEnabled
         binding.etBypassDomains.setText(config.bypassDomains ?: "")
         binding.etBypassIps.setText(config.bypassIps ?: "")
@@ -183,13 +178,11 @@ class ServerEditActivity : AppCompatActivity() {
             binding.spinnerSecurity.selectedItem.toString() else null
         val coreType = binding.spinnerCore.selectedItem.toString()
 
-        // Hysteria2 specific fields
         val hysteria2AuthPassword = binding.etHysteria2AuthPassword.text.toString().ifEmpty { null }
         val hysteria2ObfsPassword = binding.etHysteria2ObfsPassword.text.toString().ifEmpty { null }
         val hysteria2Obfs = if (binding.spinnerHysteria2Obfs.selectedItemPosition > 0)
             binding.spinnerHysteria2Obfs.selectedItem.toString() else null
 
-        // Bypass fields
         val bypassEnabled = binding.cbBypassEnabled.isChecked
         val bypassDomains = binding.etBypassDomains.text.toString().ifEmpty { null }
         val bypassIps = binding.etBypassIps.text.toString().ifEmpty { null }

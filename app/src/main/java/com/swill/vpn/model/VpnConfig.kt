@@ -21,11 +21,9 @@ data class VpnConfig(
     val sni: String? = null,
     val allowInsecure: Boolean = false,
     val coreType: String = "xray",
-    // Hysteria2 specific fields
     val hysteria2AuthPassword: String? = null,
     val hysteria2Obfs: String? = null,
     val hysteria2ObfsPassword: String? = null,
-    // Bypass/Whitelist fields
     val bypassEnabled: Boolean = false,
     val bypassDomains: String? = null,
     val bypassIps: String? = null,
@@ -281,7 +279,6 @@ data class VpnConfig(
                 put("outbound", "direct")
             })
             
-            // Add bypass rules if enabled
             if (bypassEnabled) {
                 bypassDomains?.takeIf { it.isNotEmpty() }?.let { domains ->
                     routeRules.add(JSONObject().apply {
@@ -321,7 +318,6 @@ data class VpnConfig(
                 ))
             })
         } else {
-            // Xray routing
             val routingRules = mutableListOf<JSONObject>()
             routingRules.add(JSONObject().apply {
                 put("type", "field")
@@ -329,7 +325,6 @@ data class VpnConfig(
                 put("outboundTag", "direct")
             })
             
-            // Add bypass rules if enabled
             if (bypassEnabled) {
                 bypassDomains?.takeIf { it.isNotEmpty() }?.let { domains ->
                     routingRules.add(JSONObject().apply {
@@ -477,7 +472,7 @@ data class VpnConfig(
             put("outbound", "direct")
         })
         
-        // Add bypass rules if enabled for Sing-box
+
         if (bypassEnabled) {
             bypassDomains?.takeIf { it.isNotEmpty() }?.let { domains ->
                 routeRules.add(JSONObject().apply {

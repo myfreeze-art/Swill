@@ -109,11 +109,9 @@ class AppConfig(private val context: Context) {
             putString("sni", config.sni)
             putBoolean("allowInsecure", config.allowInsecure)
             putString("coreType", config.coreType)
-            // Hysteria2 fields
             putString("hysteria2AuthPassword", config.hysteria2AuthPassword)
             putString("hysteria2Obfs", config.hysteria2Obfs)
             putString("hysteria2ObfsPassword", config.hysteria2ObfsPassword)
-            // Bypass fields
             putBoolean("bypassEnabled", config.bypassEnabled)
             putString("bypassDomains", config.bypassDomains)
             putString("bypassIps", config.bypassIps)
