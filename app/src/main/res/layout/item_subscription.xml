@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/small_margin"
-    app:cardCornerRadius="@dimen/stroke_width"
+    app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/card_elevation"
     app:cardBackgroundColor="@color/colorSurface">
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Subscription Name"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             android:textColor="@color/colorOnSurface" />
 
@@ -30,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="https://example.com/subscription"
-            android:textSize="12sp"
-            android:textColor="@color/colorOnSurface"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/colorOnSurfaceVariant"
             android:layout_marginTop="@dimen/small_margin" />
 
         <TextView
@@ -39,8 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Updated: Never"
-            android:textSize="12sp"
-            android:textColor="@color/colorOnSurface"
+            android:textSize="@dimen/text_size_tiny"
+            android:textColor="@color/colorOnSurfaceVariant"
             android:layout_marginTop="@dimen/small_margin" />
 
         <LinearLayout
@@ -50,27 +50,27 @@
             android:layout_marginTop="@dimen/default_margin"
             android:layout_gravity="end">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUpdate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height_small"
                 android:text="Update"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_tiny"
                 android:textAllCaps="false"
-                android:backgroundTint="@color/colorPrimary"
+                style="@style/ButtonStyle.Primary"
                 android:textColor="@android:color/white"
                 android:minWidth="0"
                 android:minHeight="0"
                 android:padding="@dimen/small_margin" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height_small"
                 android:text="Delete"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_tiny"
                 android:textAllCaps="false"
-                android:backgroundTint="@color/colorError"
+                style="@style/ButtonStyle.Error"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="@dimen/small_margin"
                 android:minWidth="0"
@@ -81,4 +81,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

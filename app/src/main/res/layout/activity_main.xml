@@ -6,133 +6,203 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:padding="@dimen/default_margin"
     tools:context=".ui.MainActivity">
 
-    <!-- Header -->
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorOnSurface"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:title="Swill VPN"
+        app:titleTextColor="@color/colorOnPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Status -->
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/status_disconnected"
-        android:textSize="14sp"
-        android:textColor="@color/colorDisconnected"
-        android:layout_marginTop="@dimen/small_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
-
-    <!-- Core Selector -->
-    <RadioGroup
-        android:id="@+id/coreSelector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statusText">
-
-        <RadioButton
-            android:id="@+id/rbXray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="X-ray"
-            android:textSize="14sp"
-            android:checked="true" />
-
-        <RadioButton
-            android:id="@+id/rbSingBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sing-box"
-            android:textSize="14sp"
-            android:layout_marginLeft="@dimen/default_margin" />
-    </RadioGroup>
-
-    <!-- Servers List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvServers"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/default_margin"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/default_margin"
-        app:layout_constraintBottom_toTopOf="@id/btnConnect"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coreSelector" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <!-- Connect Button -->
-    <Button
-        android:id="@+id/btnConnect"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:text="@string/btn_connect"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_marginBottom="@dimen/default_margin"
-        app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin">
 
-    <!-- Buttons Container -->
-    <LinearLayout
-        android:id="@+id/buttonsContainer"
+            <!-- Status Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardBackgroundColor="@color/colorSurface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Status"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        android:layout_marginBottom="@dimen/small_margin" />
+
+                    <TextView
+                        android:id="@+id/statusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Disconnected"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorDisconnected" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Core Selection Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardBackgroundColor="@color/colorSurface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VPN Core"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        android:layout_marginBottom="@dimen/small_margin" />
+
+                    <RadioGroup
+                        android:id="@+id/coreSelector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/small_margin">
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rbXray"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X-ray"
+                            android:textSize="@dimen/text_size_medium"
+                            android:checked="true"
+                            android:buttonTint="@color/colorPrimary" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rbSingBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sing-box"
+                            android:textSize="@dimen/text_size_medium"
+                            android:layout_marginLeft="@dimen/default_margin"
+                            android:buttonTint="@color/colorPrimary" />
+                    </RadioGroup>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Servers List Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Servers"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                android:textColor="@color/colorOnSurface"
+                android:layout_marginBottom="@dimen/small_margin" />
+
+            <!-- Servers List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvServers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/default_margin">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddServer"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="1"
+                    android:text="Add Server"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textAllCaps="false"
+                    style="@style/ButtonStyle.Primary"
+                    android:layout_marginRight="@dimen/small_margin" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnImport"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="1"
+                    android:text="Import"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textAllCaps="false"
+                    style="@style/ButtonStyle.Secondary"
+                    android:layout_marginLeft="@dimen/small_margin"
+                    android:layout_marginRight="@dimen/small_margin" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="1"
+                    android:text="Settings"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textAllCaps="false"
+                    style="@style/ButtonStyle.Surface"
+                    android:layout_marginLeft="@dimen/small_margin" />
+            </LinearLayout>
+
+            <!-- Connect Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConnect"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="Connect"
+                android:textSize="@dimen/text_size_large"
+                android:textAllCaps="false"
+                style="@style/ButtonStyle.Primary"
+                android:layout_marginTop="@dimen/large_margin" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/default_margin"
+        android:background="@color/colorSurface"
+        app:menu="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <Button
-            android:id="@+id/btnAddServer"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_weight="1"
-            android:text="Add Server"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorSurface"
-            android:layout_marginRight="@dimen/small_margin" />
-
-        <Button
-            android:id="@+id/btnImport"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_weight="1"
-            android:text="Import"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorSurface"
-            android:layout_marginRight="@dimen/small_margin" />
-
-        <Button
-            android:id="@+id/btnSettings"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_weight="1"
-            android:text="Settings"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorSurface" />
-    </LinearLayout>
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

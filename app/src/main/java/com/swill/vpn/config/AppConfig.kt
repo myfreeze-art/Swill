@@ -20,6 +20,9 @@ class AppConfig(private val context: Context) {
         private const val KEY_SUBSCRIPTIONS_LIST = "subscriptions_list"
         private const val KEY_SPLIT_TUNNEL_MODE = "split_tunnel_mode"
         private const val KEY_SPLIT_TUNNEL_APPS = "split_tunnel_apps"
+        private const val KEY_AUTO_UPDATE_SUBSCRIPTIONS = "auto_update_subscriptions"
+        private const val KEY_AUTO_PING_SERVERS = "auto_ping_servers"
+        private const val KEY_PING_METHOD = "ping_method"
     }
 
     private val prefs: SharedPreferences by lazy {
@@ -97,6 +100,24 @@ class AppConfig(private val context: Context) {
     }
 
     fun getDefaultCore(): String = prefs.getString(KEY_DEFAULT_CORE, VpnService.CORE_XRAY) ?: VpnService.CORE_XRAY
+
+    fun setAutoUpdateSubscriptions(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_AUTO_UPDATE_SUBSCRIPTIONS, enabled).apply()
+    }
+
+    fun isAutoUpdateSubscriptions(): Boolean = prefs.getBoolean(KEY_AUTO_UPDATE_SUBSCRIPTIONS, true)
+
+    fun setAutoPingServers(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_AUTO_PING_SERVERS, enabled).apply()
+    }
+
+    fun isAutoPingServers(): Boolean = prefs.getBoolean(KEY_AUTO_PING_SERVERS, true)
+
+    fun setPingMethod(method: String) {
+        prefs.edit().putString(KEY_PING_METHOD, method).apply()
+    }
+
+    fun getPingMethod(): String = prefs.getString(KEY_PING_METHOD, "http") ?: "http"
 
     private fun saveConfigToStorage(config: VpnConfig) {
         val prefs = context.getSharedPreferences("config_${config.id}", Context.MODE_PRIVATE)

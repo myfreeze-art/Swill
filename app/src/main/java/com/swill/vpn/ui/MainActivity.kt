@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.swill.vpn.R
 import com.swill.vpn.config.AppConfig
+import com.swill.vpn.core.AutoUpdater
 import com.swill.vpn.core.ServerPinger
 import com.swill.vpn.databinding.ActivityMainBinding
 import com.swill.vpn.jni.NativeUtils
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appConfig: AppConfig
     private var serverAdapter: ServerAdapter? = null
     private val serverPinger = lazy { ServerPinger(this) }
+    private val autoUpdater = lazy { AutoUpdater(this) }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -64,6 +66,9 @@ class MainActivity : AppCompatActivity() {
         setupUI()
         bindToVpnService()
         loadServers()
+
+        autoUpdateSubscriptionsOnStartup()
+        autoPingServersOnStartup()
     }
 
     override fun onDestroy() {
@@ -109,7 +114,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnAddServer.setOnClickListener { openServerEdit(null) }
         binding.btnSettings.setOnClickListener { openSettings() }
-
         binding.btnImport.setOnClickListener { openSubscriptionImport() }
 
         binding.coreSelector.setOnCheckedChangeListener { _, checkedId ->
@@ -244,18 +248,19 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Pinging ${server.name}...", Toast.LENGTH_SHORT).show()
 
         CoroutineScope(Dispatchers.Main).launch {
+            val pingMethod = appConfig.getPingMethod()
             val results = withContext(Dispatchers.IO) {
                 serverPinger.value.pingServer(
                     server.serverAddress,
                     server.serverPort,
-                    listOf(ServerPinger.METHOD_HTTP, ServerPinger.METHOD_TCP)
+                    listOf(pingMethod)
                 )
             }
 
             val bestResult = results.find { it is ServerPinger.PingResult.Success } as? ServerPinger.PingResult.Success
             serverAdapter?.updatePingResult(
                 server.id,
-                bestResult ?: ServerPinger.PingResult.Failure("All methods failed", "")
+                bestResult ?: ServerPinger.PingResult.Failure("All methods failed", pingMethod)
             )
 
             if (bestResult != null) {
@@ -267,6 +272,22 @@ class MainActivity : AppCompatActivity() {
             } else {
                 val error = (results.firstOrNull() as? ServerPinger.PingResult.Failure)?.error ?: "Unknown error"
                 Toast.makeText(this@MainActivity, "Ping failed: $error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun autoUpdateSubscriptionsOnStartup() {
+        autoUpdater.value.updateSubscriptionsOnStartup()
+    }
+
+    private fun autoPingServersOnStartup() {
+        val servers = appConfig.getAllConfigs()
+        if (servers.isEmpty()) return
+
+        autoUpdater.value.pingServersOnStartup(servers) { updatedServers ->
+            serverAdapter?.updateServers(updatedServers)
+            if (updatedServers.isNotEmpty()) {
+                serverAdapter?.selectServer(updatedServers.first())
             }
         }
     }

@@ -1,133 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:padding="@dimen/default_margin"
     tools:context=".ui.SubscriptionActivity">
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subscriptions"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorOnSurface"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large_margin"
-        app:hintEnabled="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etSubscriptionName"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:title="Subscriptions"
+        app:titleTextColor="@color/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorOnPrimary"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Subscription Name (optional)"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
-        app:hintEnabled="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSubscriptionName">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etSubscriptionUrl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Subscription URL"
-            android:inputType="textUri"
-            android:maxLines="3" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Add Subscription Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardBackgroundColor="@color/colorSurface">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/cbAutoUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Auto-update"
-        android:textSize="14sp"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSubscriptionUrl" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_margin">
 
-    <Button
-        android:id="@+id/btnAddSubscription"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:text="Add Subscription"
-        android:textSize="14sp"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbAutoUpdate" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add New Subscription"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorOnSurface"
+                        android:layout_marginBottom="@dimen/large_margin" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSubscriptions"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnAddSubscription"
-        app:layout_constraintBottom_toBottomOf="parent" />
+                    <!-- Subscription Name -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/default_margin"
+                        app:hintEnabled="true"
+                        style="@style/TextInputStyle">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSubscriptionName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Subscription Name (optional)"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+                    <!-- Subscription URL -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/default_margin"
+                        app:hintEnabled="true"
+                        style="@style/TextInputStyle">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSubscriptionUrl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Subscription URL"
+                            android:inputType="textUri"
+                            android:maxLines="3" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnPaste"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_weight="1"
-            android:text="Paste"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorSurface"
-            android:layout_marginRight="@dimen/small_margin" />
+                    <!-- Auto Update -->
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbAutoUpdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Auto-update this subscription"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginBottom="@dimen/default_margin"
+                        style="@style/CheckboxStyle" />
 
-        <Button
-            android:id="@+id/btnImport"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_weight="1"
-            android:text="Import"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorPrimary" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddSubscription"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/button_height"
+                        android:text="Add Subscription"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textAllCaps="false"
+                        style="@style/ButtonStyle.Primary" />
 
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_weight="1"
-            android:text="Back"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorSurface"
-            android:layout_marginLeft="@dimen/small_margin" />
-    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Quick Import Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardBackgroundColor="@color/colorSurface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quick Import"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorOnSurface"
+                        android:layout_marginBottom="@dimen/large_margin" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="@dimen/default_margin">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPaste"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/button_height"
+                            android:layout_weight="1"
+                            android:text="Paste"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textAllCaps="false"
+                            style="@style/ButtonStyle.Surface"
+                            android:layout_marginRight="@dimen/small_margin" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnImport"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/button_height"
+                            android:layout_weight="1"
+                            android:text="Import"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textAllCaps="false"
+                            style="@style/ButtonStyle.Primary"
+                            android:layout_marginLeft="@dimen/small_margin" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Subscriptions List Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Subscriptions"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                android:textColor="@color/colorOnSurface"
+                android:layout_marginTop="@dimen/large_margin"
+                android:layout_marginBottom="@dimen/small_margin" />
+
+            <!-- Subscriptions List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSubscriptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin" />
+
+            <!-- Back Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="Back"
+                android:textSize="@dimen/text_size_medium"
+                android:textAllCaps="false"
+                style="@style/ButtonStyle.Surface"
+                android:layout_marginTop="@dimen/large_margin" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

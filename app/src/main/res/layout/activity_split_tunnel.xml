@@ -1,122 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:padding="@dimen/default_margin"
     tools:context=".ui.SplitTunnelActivity">
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Split Tunneling"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorOnSurface"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvModeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Routing Mode"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorOnSurface"
-        android:layout_marginTop="@dimen/large_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
-
-    <RadioGroup
-        android:id="@+id/rgMode"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvModeLabel">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:title="Split Tunneling"
+        app:titleTextColor="@color/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorOnPrimary"
+        app:layout_scrollFlags="scroll|enterAlways" />
 
-        <RadioButton
-            android:id="@+id/rbAllThroughVpn"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="All apps through VPN"
-            android:textSize="14sp"
-            android:checked="true" />
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin">
 
-        <RadioButton
-            android:id="@+id/rbAllBypass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="All apps bypass VPN"
-            android:textSize="14sp"
-            android:layout_marginTop="@dimen/small_margin" />
+            <!-- Mode Selection Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardBackgroundColor="@color/colorSurface">
 
-        <RadioButton
-            android:id="@+id/rbCustom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Custom routing"
-            android:textSize="14sp"
-            android:layout_marginTop="@dimen/small_margin" />
-    </RadioGroup>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_margin">
 
-    <TextView
-        android:id="@+id/tvAppsLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Apps"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorOnSurface"
-        android:layout_marginTop="@dimen/large_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rgMode" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Routing Mode"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorOnSurface"
+                        android:layout_marginBottom="@dimen/large_margin" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvApps"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAppsLabel"
-        app:layout_constraintBottom_toTopOf="@id/btnSave" />
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbAllThroughVpn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="All apps through VPN"
+                        android:textSize="@dimen/text_size_medium"
+                        android:buttonTint="@color/colorPrimary"
+                        android:checked="true" />
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:text="Save"
-        android:textSize="14sp"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbAllBypass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="All apps bypass VPN"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:buttonTint="@color/colorPrimary" />
 
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:textSize="14sp"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/colorSurface"
-        android:layout_marginLeft="@dimen/default_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnSave"
-        app:layout_constraintBottom_toBottomOf="@id/btnSave" />
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbCustom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Custom routing (select apps below)"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:buttonTint="@color/colorPrimary" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Apps List Card (visible only in custom mode) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardApps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardBackgroundColor="@color/colorSurface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_margin">
+
+                    <TextView
+                        android:id="@+id/tvAppsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Apps for Custom Routing"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorOnSurface"
+                        android:layout_marginBottom="@dimen/large_margin" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable the toggle to include the app in split tunneling. Use the second toggle to route through VPN."
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        android:layout_marginBottom="@dimen/default_margin" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvApps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="Save Settings"
+                android:textSize="@dimen/text_size_medium"
+                android:textAllCaps="false"
+                style="@style/ButtonStyle.Primary"
+                android:layout_marginTop="@dimen/large_margin" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

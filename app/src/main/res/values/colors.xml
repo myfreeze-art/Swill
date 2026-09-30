@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary Colors -->
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryLight">#BB86FC</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+    
+    <!-- Secondary Colors -->
     <color name="colorAccent">#03DAC6</color>
+    <color name="colorSecondary">#03DAC6</color>
+    <color name="colorSecondaryVariant">#018786</color>
+    
+    <!-- Background Colors -->
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurfaceVariant">#F5F5F5</color>
+    
+    <!-- Error Colors -->
     <color name="colorError">#B00020</color>
+    <color name="colorErrorLight">#EF5350</color>
+    
+    <!-- Text Colors -->
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorOnSurface">#000000</color>
-
+    <color name="colorOnSurface">#212121</color>
+    <color name="colorOnSurfaceVariant">#757575</color>
+    <color name="colorOnBackground">#212121</color>
+    
+    <!-- Status Colors -->
     <color name="colorConnected">#4CAF50</color>
     <color name="colorConnecting">#FFC107</color>
     <color name="colorDisconnected">#F44336</color>
+    
+    <!-- Card Colors -->
+    <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorCardStroke">#E0E0E0</color>
+    
+    <!-- Divider Colors -->
+    <color name="colorDivider">#E0E0E0</color>
+    
+    <!-- Button Colors -->
+    <color name="colorButtonPrimary">#6200EE</color>
+    <color name="colorButtonPrimaryDisabled">#BB86FC</color>
+    <color name="colorButtonSecondary">#03DAC6</color>
+    <color name="colorButtonError">#B00020</color>
+    
+    <!-- App Bar Colors -->
+    <color name="colorAppBar">#6200EE</color>
+    <color name="colorAppBarText">#FFFFFF</color>
 </resources>

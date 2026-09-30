@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/small_margin"
-    app:cardCornerRadius="@dimen/stroke_width"
+    app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/card_elevation"
     app:cardBackgroundColor="@color/colorSurface">
 
@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Server Name"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
                     android:textColor="@color/colorOnSurface" />
 
@@ -41,8 +41,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="192.168.1.1:443"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorOnSurface"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/colorOnSurfaceVariant"
                     android:layout_marginTop="@dimen/small_margin" />
 
                 <LinearLayout
@@ -51,37 +51,40 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/small_margin">
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/tvProtocol"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="VLESS"
-                        android:textSize="12sp"
-                        android:background="@drawable/bg_protocol_vless"
-                        android:paddingHorizontal="@dimen/small_margin"
-                        android:paddingVertical="2dp" />
+                        android:textSize="@dimen/text_size_tiny"
+                        app:chipBackgroundColor="@color/colorPrimaryLight"
+                        app:chipStrokeColor="@color/colorPrimary"
+                        app:chipStrokeWidth="@dimen/stroke_width"
+                        android:textColor="@color/colorPrimary" />
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/tvCore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="X-RAY"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_tiny"
                         android:layout_marginLeft="@dimen/small_margin"
-                        android:background="@drawable/bg_core_xray"
-                        android:paddingHorizontal="@dimen/small_margin"
-                        android:paddingVertical="2dp" />
+                        app:chipBackgroundColor="@color/colorSecondary"
+                        app:chipStrokeColor="@color/colorSecondary"
+                        app:chipStrokeWidth="@dimen/stroke_width"
+                        android:textColor="@color/colorOnPrimary" />
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/tvPing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="?"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_tiny"
                         android:layout_marginLeft="@dimen/small_margin"
-                        android:background="@color/colorSurface"
-                        android:paddingHorizontal="@dimen/small_margin"
-                        android:paddingVertical="2dp" />
+                        app:chipBackgroundColor="@color/colorSurfaceVariant"
+                        app:chipStrokeColor="@color/colorDivider"
+                        app:chipStrokeWidth="@dimen/stroke_width"
+                        android:textColor="@color/colorOnSurface" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -92,41 +95,40 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/btnEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    android:textSize="12sp"
-                    android:textAllCaps="false"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:textColor="@android:color/white"
-                    android:minWidth="0"
-                    android:minHeight="0"
-                    android:padding="@dimen/small_margin" />
-
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPing"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
                     android:text="Ping"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_tiny"
                     android:textAllCaps="false"
-                    android:backgroundTint="@color/colorAccent"
-                    android:textColor="@android:color/white"
-                    android:layout_marginLeft="@dimen/small_margin"
+                    style="@style/ButtonStyle.Secondary"
                     android:minWidth="0"
                     android:minHeight="0"
                     android:padding="@dimen/small_margin" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
+                    android:text="Edit"
+                    android:textSize="@dimen/text_size_tiny"
+                    android:textAllCaps="false"
+                    style="@style/ButtonStyle.Primary"
+                    android:textColor="@android:color/white"
+                    android:minWidth="0"
+                    android:minHeight="0"
+                    android:padding="@dimen/small_margin"
+                    android:layout_marginLeft="@dimen/small_margin" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDelete"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
                     android:text="Delete"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_tiny"
                     android:textAllCaps="false"
-                    android:backgroundTint="@color/colorError"
+                    style="@style/ButtonStyle.Error"
                     android:textColor="@android:color/white"
                     android:layout_marginLeft="@dimen/small_margin"
                     android:minWidth="0"
@@ -140,11 +142,11 @@
         <View
             android:id="@+id/viewSelected"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="3dp"
             android:background="@color/colorPrimary"
             android:visibility="gone"
             android:layout_marginTop="@dimen/default_margin" />
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

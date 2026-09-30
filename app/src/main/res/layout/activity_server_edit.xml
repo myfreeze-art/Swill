@@ -1,377 +1,504 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_margin"
     android:fillViewport="true"
+    android:background="@color/colorBackground"
     tools:context=".ui.ServerEditActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/default_margin">
+        android:padding="@dimen/default_margin">
 
-        <!-- Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Server"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorOnSurface"
-            android:layout_marginBottom="@dimen/default_margin" />
+        <!-- Toolbar -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            app:title="Edit Server"
+            app:titleTextColor="@color/colorOnPrimary"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/colorOnPrimary" />
 
-        <!-- Name -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Server Settings Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
             android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etName"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardBackgroundColor="@color/colorSurface">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Server Name"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
 
-        <!-- Server Address -->
-        <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Server Configuration"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorOnSurface"
+                    android:layout_marginBottom="@dimen/large_margin" />
+
+                <!-- Server Name -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Server Name"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Server Address -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etServerAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Server Address"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Server Port -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etServerPort"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Port"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Protocol -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <Spinner
+                        android:id="@+id/spinnerProtocol"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- UUID/Password -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="UUID/Password"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Alter ID -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAlterId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alter ID (optional)"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Network Settings Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etServerAddress"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardBackgroundColor="@color/colorSurface">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Server Address"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
 
-        <!-- Server Port -->
-        <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Network Settings"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorOnSurface"
+                    android:layout_marginBottom="@dimen/large_margin" />
+
+                <!-- Network -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <Spinner
+                        android:id="@+id/spinnerNetwork"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Security -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <Spinner
+                        android:id="@+id/spinnerSecurity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Request Host -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etRequestHost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Request Host (optional)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Path -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPath"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Path (optional)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- SNI -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSni"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="SNI (optional)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Allow Insecure -->
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/cbAllowInsecure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Allow Insecure Connection"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    style="@style/CheckboxStyle" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Hysteria2 Settings Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etServerPort"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardBackgroundColor="@color/colorSurface">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Port"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
 
-        <!-- Protocol -->
-        <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:id="@+id/tvHysteria2SettingsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hysteria2 Settings"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorOnSurface"
+                    android:layout_marginBottom="@dimen/large_margin" />
+
+                <!-- Hysteria2 Obfs -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle"
+                    android:id="@+id/llHysteria2Obfs">
+                    <Spinner
+                        android:id="@+id/spinnerHysteria2Obfs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Hysteria2 Auth Password -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle"
+                    android:id="@+id/llHysteria2AuthPassword">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etHysteria2AuthPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Auth Password (optional)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Hysteria2 Obfs Password -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle"
+                    android:id="@+id/llHysteria2ObfsPassword">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etHysteria2ObfsPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Obfs Password (optional)"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Bypass Settings Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <Spinner
-                android:id="@+id/spinnerProtocol"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardBackgroundColor="@color/colorSurface">
 
-        <!-- UUID/Password -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUuid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="UUID/Password"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Alter ID (for VMESS) -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etAlterId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Alter ID (optional)"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Network -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <Spinner
-                android:id="@+id/spinnerNetwork"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Security -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <Spinner
-                android:id="@+id/spinnerSecurity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Request Host -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRequestHost"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Request Host (optional)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
 
-        <!-- Path -->
-        <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bypass / Whitelist"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorOnSurface"
+                    android:layout_marginBottom="@dimen/large_margin" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/cbBypassEnabled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enable Bypass"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    style="@style/CheckboxStyle" />
+
+                <!-- Bypass Domains -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBypassDomains"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Domains (comma separated)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Bypass IPs -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBypassIps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="IPs (comma separated)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Bypass GeoIP -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:hintEnabled="true"
+                    style="@style/TextInputStyle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBypassGeoip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="GeoIP codes (comma separated, e.g: cn,ru,ir)"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Core & Actions Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPath"
+            android:layout_marginBottom="@dimen/large_margin"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardBackgroundColor="@color/colorSurface">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Path (optional)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
 
-        <!-- SNI -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSni"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="SNI (optional)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VPN Core"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorOnSurface"
+                    android:layout_marginBottom="@dimen/large_margin" />
 
-        <!-- Allow Insecure -->
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbAllowInsecure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Allow Insecure Connection"
-            android:textSize="14sp"
-            android:layout_marginBottom="@dimen/default_margin" />
+                <RadioGroup
+                    android:id="@+id/spinnerCore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/large_margin">
 
-        <!-- Hysteria2 Specific Settings -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hysteria2 Settings"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorOnSurface"
-            android:layout_marginBottom="@dimen/small_margin"
-            android:visibility="gone"
-            android:id="@+id/tvHysteria2SettingsLabel" />
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbCoreXray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="X-ray"
+                        android:textSize="@dimen/text_size_medium"
+                        android:checked="true"
+                        android:buttonTint="@color/colorPrimary" />
 
-        <!-- Hysteria2 Obfs -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true"
-            android:visibility="gone"
-            android:id="@+id/llHysteria2Obfs">
-            <Spinner
-                android:id="@+id/spinnerHysteria2Obfs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbCoreSingBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sing-box"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginLeft="@dimen/default_margin"
+                        android:buttonTint="@color/colorPrimary" />
+                </RadioGroup>
 
-        <!-- Hysteria2 Auth Password -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true"
-            android:visibility="gone"
-            android:id="@+id/llHysteria2AuthPassword">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etHysteria2AuthPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Auth Password (optional)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/btnGenerateUuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="Generate UUID"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textAllCaps="false"
+                    style="@style/ButtonStyle.Surface"
+                    android:layout_marginBottom="@dimen/default_margin" />
 
-        <!-- Hysteria2 Obfs Password -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true"
-            android:visibility="gone"
-            android:id="@+id/llHysteria2ObfsPassword">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etHysteria2ObfsPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Obfs Password (optional)"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
+                <!-- Action Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin">
 
-        <!-- Bypass Settings -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bypass / Whitelist"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorOnSurface"
-            android:layout_marginBottom="@dimen/small_margin" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCancel"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="1"
+                        android:text="Cancel"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textAllCaps="false"
+                        style="@style/ButtonStyle.Surface"
+                        android:layout_marginRight="@dimen/small_margin" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbBypassEnabled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enable Bypass"
-            android:textSize="14sp"
-            android:layout_marginBottom="@dimen/default_margin" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSave"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="1"
+                        android:text="Save"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textAllCaps="false"
+                        style="@style/ButtonStyle.Primary"
+                        android:layout_marginLeft="@dimen/small_margin" />
+                </LinearLayout>
 
-        <!-- Bypass Domains -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBypassDomains"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Domains (comma separated)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Bypass IPs -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBypassIps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="IPs (comma separated)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Bypass GeoIP -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:hintEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBypassGeoip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="GeoIP codes (comma separated, e.g: cn,ru,ir)"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Core Type -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="VPN Core"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorOnSurface"
-            android:layout_marginBottom="@dimen/small_margin" />
-
-        <RadioGroup
-            android:id="@+id/spinnerCore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="@dimen/default_margin">
-
-            <RadioButton
-                android:id="@+id/rbCoreXray"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="X-ray"
-                android:textSize="14sp"
-                android:checked="true" />
-
-            <RadioButton
-                android:id="@+id/rbCoreSingBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sing-box"
-                android:textSize="14sp"
-                android:layout_marginLeft="@dimen/default_margin" />
-        </RadioGroup>
-
-        <!-- Generate UUID Button -->
-        <Button
-            android:id="@+id/btnGenerateUuid"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:text="Generate UUID"
-            android:textSize="14sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/colorSurface"
-            android:layout_marginBottom="@dimen/default_margin" />
-
-        <!-- Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:textSize="14sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/colorSurface"
-                android:layout_marginRight="@dimen/small_margin" />
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height"
-                android:layout_weight="1"
-                android:text="Save"
-                android:textSize="14sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/colorPrimary" />
-        </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
