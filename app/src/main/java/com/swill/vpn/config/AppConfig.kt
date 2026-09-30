@@ -109,6 +109,15 @@ class AppConfig(private val context: Context) {
             putString("sni", config.sni)
             putBoolean("allowInsecure", config.allowInsecure)
             putString("coreType", config.coreType)
+            // Hysteria2 fields
+            putString("hysteria2AuthPassword", config.hysteria2AuthPassword)
+            putString("hysteria2Obfs", config.hysteria2Obfs)
+            putString("hysteria2ObfsPassword", config.hysteria2ObfsPassword)
+            // Bypass fields
+            putBoolean("bypassEnabled", config.bypassEnabled)
+            putString("bypassDomains", config.bypassDomains)
+            putString("bypassIps", config.bypassIps)
+            putString("bypassGeoip", config.bypassGeoip)
             apply()
         }
     }
@@ -132,7 +141,14 @@ class AppConfig(private val context: Context) {
                 path = prefs.getString("path", null),
                 sni = prefs.getString("sni", null),
                 allowInsecure = prefs.getBoolean("allowInsecure", false),
-                coreType = prefs.getString("coreType", VpnService.CORE_XRAY) ?: VpnService.CORE_XRAY
+                coreType = prefs.getString("coreType", VpnService.CORE_XRAY) ?: VpnService.CORE_XRAY,
+                hysteria2AuthPassword = prefs.getString("hysteria2AuthPassword", null),
+                hysteria2Obfs = prefs.getString("hysteria2Obfs", null),
+                hysteria2ObfsPassword = prefs.getString("hysteria2ObfsPassword", null),
+                bypassEnabled = prefs.getBoolean("bypassEnabled", false),
+                bypassDomains = prefs.getString("bypassDomains", null),
+                bypassIps = prefs.getString("bypassIps", null),
+                bypassGeoip = prefs.getString("bypassGeoip", null)
             )
         } catch (_: Exception) {
             null

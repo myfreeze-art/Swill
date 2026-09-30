@@ -30,6 +30,8 @@ class ServerEditActivity : AppCompatActivity() {
         setupListeners()
 
         currentConfig?.let { loadConfig(it) }
+
+        updateHysteria2FieldsVisibility()
     }
 
     private fun setupUI() {
@@ -37,7 +39,8 @@ class ServerEditActivity : AppCompatActivity() {
             VpnConfig.PROTOCOL_VLESS,
             VpnConfig.PROTOCOL_VMESS,
             VpnConfig.PROTOCOL_TROJAN,
-            VpnConfig.PROTOCOL_SHADOWSOCKS
+            VpnConfig.PROTOCOL_SHADOWSOCKS,
+            VpnConfig.PROTOCOL_HYSTERIA2
         )
 
         val protocolAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, protocols)
@@ -70,6 +73,16 @@ class ServerEditActivity : AppCompatActivity() {
         val coreAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cores)
         coreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCore.adapter = coreAdapter
+
+        // Hysteria2 Obfs spinner
+        val hysteria2ObfsOptions = listOf(
+            VpnConfig.ObfsNone,
+            VpnConfig.ObfsSalamander,
+            VpnConfig.ObfsFaketls
+        )
+        val hysteria2ObfsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, hysteria2ObfsOptions)
+        hysteria2ObfsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerHysteria2Obfs.adapter = hysteria2ObfsAdapter
     }
 
     private fun setupListeners() {
@@ -78,6 +91,31 @@ class ServerEditActivity : AppCompatActivity() {
         binding.btnGenerateUuid.setOnClickListener {
             binding.etUuid.setText(UUID.randomUUID().toString())
         }
+
+        binding.spinnerProtocol.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                updateHysteria2FieldsVisibility()
+                // Hysteria2 only works with Sing-box core
+                val selectedProtocol = parent?.getItemAtPosition(position).toString()
+                if (selectedProtocol == VpnConfig.PROTOCOL_HYSTERIA2) {
+                    // Auto-select Sing-box for Hysteria2
+                    binding.spinnerCore.setSelection(
+                        (binding.spinnerCore.adapter as ArrayAdapter<String>).getPosition(VpnService.CORE_SINGBOX)
+                    )
+                }
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+    }
+
+    private fun updateHysteria2FieldsVisibility() {
+        val selectedProtocol = binding.spinnerProtocol.selectedItem.toString()
+        val isHysteria2 = selectedProtocol == VpnConfig.PROTOCOL_HYSTERIA2
+
+        binding.tvHysteria2SettingsLabel.visibility = if (isHysteria2) android.view.View.VISIBLE else android.view.View.GONE
+        binding.llHysteria2Obfs.visibility = if (isHysteria2) android.view.View.VISIBLE else android.view.View.GONE
+        binding.llHysteria2AuthPassword.visibility = if (isHysteria2) android.view.View.VISIBLE else android.view.View.GONE
+        binding.llHysteria2ObfsPassword.visibility = if (isHysteria2) android.view.View.VISIBLE else android.view.View.GONE
     }
 
     private fun loadConfig(config: VpnConfig) {
@@ -110,6 +148,21 @@ class ServerEditActivity : AppCompatActivity() {
         binding.spinnerCore.setSelection(
             (binding.spinnerCore.adapter as ArrayAdapter<String>).getPosition(config.coreType)
         )
+
+        // Hysteria2 specific fields
+        binding.etHysteria2AuthPassword.setText(config.hysteria2AuthPassword ?: "")
+        binding.etHysteria2ObfsPassword.setText(config.hysteria2ObfsPassword ?: "")
+        config.hysteria2Obfs?.let {
+            binding.spinnerHysteria2Obfs.setSelection(
+                (binding.spinnerHysteria2Obfs.adapter as ArrayAdapter<String>).getPosition(it)
+            )
+        }
+
+        // Bypass fields
+        binding.cbBypassEnabled.isChecked = config.bypassEnabled
+        binding.etBypassDomains.setText(config.bypassDomains ?: "")
+        binding.etBypassIps.setText(config.bypassIps ?: "")
+        binding.etBypassGeoip.setText(config.bypassGeoip ?: "")
     }
 
     private fun saveConfig() {
@@ -129,6 +182,18 @@ class ServerEditActivity : AppCompatActivity() {
         val security = if (binding.spinnerSecurity.selectedItemPosition > 0)
             binding.spinnerSecurity.selectedItem.toString() else null
         val coreType = binding.spinnerCore.selectedItem.toString()
+
+        // Hysteria2 specific fields
+        val hysteria2AuthPassword = binding.etHysteria2AuthPassword.text.toString().ifEmpty { null }
+        val hysteria2ObfsPassword = binding.etHysteria2ObfsPassword.text.toString().ifEmpty { null }
+        val hysteria2Obfs = if (binding.spinnerHysteria2Obfs.selectedItemPosition > 0)
+            binding.spinnerHysteria2Obfs.selectedItem.toString() else null
+
+        // Bypass fields
+        val bypassEnabled = binding.cbBypassEnabled.isChecked
+        val bypassDomains = binding.etBypassDomains.text.toString().ifEmpty { null }
+        val bypassIps = binding.etBypassIps.text.toString().ifEmpty { null }
+        val bypassGeoip = binding.etBypassGeoip.text.toString().ifEmpty { null }
 
         if (serverAddress.isEmpty()) {
             Toast.makeText(this, "Please enter server address", Toast.LENGTH_SHORT).show()
@@ -160,7 +225,14 @@ class ServerEditActivity : AppCompatActivity() {
             path = path,
             sni = sni,
             allowInsecure = allowInsecure,
-            coreType = coreType
+            coreType = coreType,
+            hysteria2AuthPassword = hysteria2AuthPassword,
+            hysteria2Obfs = hysteria2Obfs,
+            hysteria2ObfsPassword = hysteria2ObfsPassword,
+            bypassEnabled = bypassEnabled,
+            bypassDomains = bypassDomains,
+            bypassIps = bypassIps,
+            bypassGeoip = bypassGeoip
         )
 
         appConfig.saveConfig(config)

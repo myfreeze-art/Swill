@@ -20,7 +20,16 @@ data class VpnConfig(
     val path: String? = null,
     val sni: String? = null,
     val allowInsecure: Boolean = false,
-    val coreType: String = "xray"
+    val coreType: String = "xray",
+    // Hysteria2 specific fields
+    val hysteria2AuthPassword: String? = null,
+    val hysteria2Obfs: String? = null,
+    val hysteria2ObfsPassword: String? = null,
+    // Bypass/Whitelist fields
+    val bypassEnabled: Boolean = false,
+    val bypassDomains: String? = null,
+    val bypassIps: String? = null,
+    val bypassGeoip: String? = null
 ) : Parcelable {
 
     companion object {
@@ -29,6 +38,7 @@ data class VpnConfig(
         const val PROTOCOL_TROJAN = "trojan"
         const val PROTOCOL_SHADOWSOCKS = "shadowsocks"
         const val PROTOCOL_WIREGUARD = "wireguard"
+        const val PROTOCOL_HYSTERIA2 = "hysteria2"
 
         const val NETWORK_TCP = "tcp"
         const val NETWORK_WS = "ws"
@@ -39,6 +49,10 @@ data class VpnConfig(
         const val SECURITY_NONE = "none"
         const val SECURITY_TLS = "tls"
         const val SECURITY_REALITY = "reality"
+
+        const val ObfsNone = "none"
+        const val ObfsSalamander = "salamander"
+        const val ObfsFaketls = "faketls"
     }
 
     fun toJson(): String {
@@ -215,6 +229,31 @@ data class VpnConfig(
                 }))
             }
 
+            PROTOCOL_HYSTERIA2 -> {
+                json.put("inbounds", JSONObject().apply {
+                    put("port", 1080)
+                    put("protocol", "socks")
+                    put("settings", JSONObject().apply {
+                        put("auth", "noauth")
+                        put("udp", true)
+                    })
+                })
+
+                json.put("outbounds", listOf(JSONObject().apply {
+                    put("protocol", "hysteria2")
+                    put("settings", JSONObject().apply {
+                        put("servers", listOf(JSONObject().apply {
+                            put("address", serverAddress)
+                            put("port", serverPort)
+                            put("password", uuid)
+                            hysteria2Obfs?.let { put("obfs", it) }
+                            hysteria2ObfsPassword?.let { put("obfs_password", it) }
+                            hysteria2AuthPassword?.let { put("auth_password", it) }
+                        }))
+                    })
+                }))
+            }
+
             else -> {
                 json.put("inbounds", JSONObject().apply {
                     put("port", 1080)
@@ -232,21 +271,40 @@ data class VpnConfig(
         }
 
         if (coreType == "singbox") {
+            val routeRules = mutableListOf<JSONObject>()
+            routeRules.add(JSONObject().apply {
+                put("protocol", "dns")
+                put("outbound", "dns-out")
+            })
+            routeRules.add(JSONObject().apply {
+                put("geoip", listOf("private"))
+                put("outbound", "direct")
+            })
+            
+            // Add bypass rules if enabled
+            if (bypassEnabled) {
+                bypassDomains?.takeIf { it.isNotEmpty() }?.let { domains ->
+                    routeRules.add(JSONObject().apply {
+                        put("domain", domains.split(",").map { it.trim() })
+                        put("outbound", "direct")
+                    })
+                }
+                bypassIps?.takeIf { it.isNotEmpty() }?.let { ips ->
+                    routeRules.add(JSONObject().apply {
+                        put("ip", ips.split(",").map { it.trim() })
+                        put("outbound", "direct")
+                    })
+                }
+                bypassGeoip?.takeIf { it.isNotEmpty() }?.let { geoip ->
+                    routeRules.add(JSONObject().apply {
+                        put("geoip", geoip.split(",").map { it.trim() })
+                        put("outbound", "direct")
+                    })
+                }
+            }
+
             json.put("route", JSONObject().apply {
-                put("rules", listOf(
-                    JSONObject().apply {
-                        put("protocol", "dns")
-                        put("outbound", "dns-out")
-                    },
-                    JSONObject().apply {
-                        put("geoip", listOf("private"))
-                        put("outbound", "direct")
-                    },
-                    JSONObject().apply {
-                        put("geoip", listOf("cn"))
-                        put("outbound", "direct")
-                    }
-                ))
+                put("rules", routeRules)
                 put("auto_detect_interface", true)
             })
 
@@ -261,6 +319,44 @@ data class VpnConfig(
                         put("detour", "direct")
                     }
                 ))
+            })
+        } else {
+            // Xray routing
+            val routingRules = mutableListOf<JSONObject>()
+            routingRules.add(JSONObject().apply {
+                put("type", "field")
+                put("ip", listOf("geoip:private"))
+                put("outboundTag", "direct")
+            })
+            
+            // Add bypass rules if enabled
+            if (bypassEnabled) {
+                bypassDomains?.takeIf { it.isNotEmpty() }?.let { domains ->
+                    routingRules.add(JSONObject().apply {
+                        put("type", "field")
+                        put("domain", domains.split(",").map { it.trim() })
+                        put("outboundTag", "direct")
+                    })
+                }
+                bypassIps?.takeIf { it.isNotEmpty() }?.let { ips ->
+                    routingRules.add(JSONObject().apply {
+                        put("type", "field")
+                        put("ip", ips.split(",").map { it.trim() })
+                        put("outboundTag", "direct")
+                    })
+                }
+                bypassGeoip?.takeIf { it.isNotEmpty() }?.let { geoip ->
+                    routingRules.add(JSONObject().apply {
+                        put("type", "field")
+                        put("ip", geoip.split(",").map { "geoip:$it" })
+                        put("outboundTag", "direct")
+                    })
+                }
+            }
+            
+            json.put("routing", JSONObject().apply {
+                put("domainStrategy", "AsIs")
+                put("rules", routingRules)
             })
         }
 
@@ -322,9 +418,19 @@ data class VpnConfig(
                         put("password", uuid)
                         put("method", security ?: "aes-256-gcm")
                     }
+                    PROTOCOL_HYSTERIA2 -> {
+                        put("server", serverAddress)
+                        put("server_port", serverPort)
+                        put("password", uuid)
+                        hysteria2Obfs?.let { put("obfs", it) }
+                        hysteria2ObfsPassword?.let { put("obfs_password", it) }
+                        hysteria2AuthPassword?.let { put("auth_password", it) }
+                        put("insecure", allowInsecure)
+                        sni?.let { put("sni", it) }
+                    }
                 }
 
-                if (network != null) {
+                if (network != null && protocol != PROTOCOL_HYSTERIA2) {
                     put("transport", JSONObject().apply {
                         put("type", network)
                         when (network) {
@@ -361,17 +467,40 @@ data class VpnConfig(
             }
         ))
 
-        json.put("route", JSONObject().apply {
-            put("rules", listOf(
-                JSONObject().apply {
-                    put("protocol", "dns")
-                    put("outbound", "dns-out")
-                },
-                JSONObject().apply {
-                    put("geoip", listOf("private"))
+        val routeRules = mutableListOf<JSONObject>()
+        routeRules.add(JSONObject().apply {
+            put("protocol", "dns")
+            put("outbound", "dns-out")
+        })
+        routeRules.add(JSONObject().apply {
+            put("geoip", listOf("private"))
+            put("outbound", "direct")
+        })
+        
+        // Add bypass rules if enabled for Sing-box
+        if (bypassEnabled) {
+            bypassDomains?.takeIf { it.isNotEmpty() }?.let { domains ->
+                routeRules.add(JSONObject().apply {
+                    put("domain", domains.split(",").map { it.trim() })
                     put("outbound", "direct")
-                }
-            ))
+                })
+            }
+            bypassIps?.takeIf { it.isNotEmpty() }?.let { ips ->
+                routeRules.add(JSONObject().apply {
+                    put("ip", ips.split(",").map { it.trim() })
+                    put("outbound", "direct")
+                })
+            }
+            bypassGeoip?.takeIf { it.isNotEmpty() }?.let { geoip ->
+                routeRules.add(JSONObject().apply {
+                    put("geoip", geoip.split(",").map { it.trim() })
+                    put("outbound", "direct")
+                })
+            }
+        }
+
+        json.put("route", JSONObject().apply {
+            put("rules", routeRules)
             put("auto_detect_interface", true)
         })
 

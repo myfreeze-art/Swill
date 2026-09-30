@@ -181,6 +181,124 @@
             android:textSize="14sp"
             android:layout_marginBottom="@dimen/default_margin" />
 
+        <!-- Hysteria2 Specific Settings -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hysteria2 Settings"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorOnSurface"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:visibility="gone"
+            android:id="@+id/tvHysteria2SettingsLabel" />
+
+        <!-- Hysteria2 Obfs -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:hintEnabled="true"
+            android:visibility="gone"
+            android:id="@+id/llHysteria2Obfs">
+            <Spinner
+                android:id="@+id/spinnerHysteria2Obfs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Hysteria2 Auth Password -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:hintEnabled="true"
+            android:visibility="gone"
+            android:id="@+id/llHysteria2AuthPassword">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etHysteria2AuthPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Auth Password (optional)"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Hysteria2 Obfs Password -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:hintEnabled="true"
+            android:visibility="gone"
+            android:id="@+id/llHysteria2ObfsPassword">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etHysteria2ObfsPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Obfs Password (optional)"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Bypass Settings -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bypass / Whitelist"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorOnSurface"
+            android:layout_marginBottom="@dimen/small_margin" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbBypassEnabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable Bypass"
+            android:textSize="14sp"
+            android:layout_marginBottom="@dimen/default_margin" />
+
+        <!-- Bypass Domains -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:hintEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBypassDomains"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Domains (comma separated)"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Bypass IPs -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:hintEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBypassIps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="IPs (comma separated)"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Bypass GeoIP -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:hintEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBypassGeoip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="GeoIP codes (comma separated, e.g: cn,ru,ir)"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- Core Type -->
         <TextView
             android:layout_width="wrap_content"
